@@ -1,5 +1,11 @@
 = Mobile Fu
 
+
+This fork adds the ability to ignore curtain request formats from being mobilized. You might want to return JSON for :json or :iphone mime types and not let mobile_fu convert your format to :mobile.
+
+Usage example at the end of this file.
+
+
 Want to automatically detect mobile devices that access your Rails application?  
 Mobile Fu allows you to do just that.  People can access your site from a Palm,
 Blackberry, iPhone, iPad, Nokia, etc. and it will automatically adjust the format
@@ -86,13 +92,23 @@ http://blogs.pathf.com/agileajax/2008/05/rails-developme.html
 
 Hopefully this should help you create some awesome mobile applications.
 
+== Ignoring specific request formats
+
+If you want to ignore specific request formats you can just pass ':ignore_formats => [<array of your formats>]' to has_mobile_fu.
+
+example:
+  class ApplicationController < ActionController::Base
+    has_mobile_fu :ignore_formats => [:iphone, :json] 
+  end
+
 == Testing Mobile Interface
 	
 If you want to force the mobile interface for testing, you can either use a 
-mobile device emulator, or you can pass 'true' to has_mobile_fu. 
+mobile device emulator, or you can pass ':test_mode => true' to has_mobile_fu. 
 
+example:
   class ApplicationController < ActionController::Base
-    has_mobile_fu(true) 
+    has_mobile_fu :test_mode => true 
   end
 
 
