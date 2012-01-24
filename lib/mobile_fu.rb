@@ -29,11 +29,10 @@ module ActionController
 
       def ignored_formats; @@ignored_formats; end
 
-      def has_mobile_fu(options = {})
+      def has_mobile_fu(test_mode = false, *args)
         include ActionController::MobileFu::InstanceMethods
 
-        @@ignored_formats = options.has_key?(:ignore_formats) ? options[:ignore_formats] : []
-        test_mode = options.has_key?(:test_mode) ? options[:test_mode] : false
+        @@ignored_formats = args.has_key?(:ignore_formats) ? args[:ignore_formats] : []
 
         if test_mode
           before_filter :force_mobile_format
