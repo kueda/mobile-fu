@@ -94,21 +94,22 @@ Hopefully this should help you create some awesome mobile applications.
 
 == Ignoring specific request formats
 
-If you want to ignore specific request formats you can just pass ':ignore_formats => [<array of your formats>]' to has_mobile_fu.
+If you want to ignore specific request formats you can just pass ':ignore_formats => [<array of your formats>]' as second argument to has_mobile_fu.
+NOTE: If you want to pass :ignore_formats you'll have to pass the 1st argument (test_mode). If you don't know what to put in just pass "false".
 
 example:
   class ApplicationController < ActionController::Base
-    has_mobile_fu :ignore_formats => [:iphone, :json] 
+    has_mobile_fu false, :ignore_formats => [:iphone, :json] 
   end
 
 == Testing Mobile Interface
 	
 If you want to force the mobile interface for testing, you can either use a 
-mobile device emulator, or you can pass ':test_mode => true' to has_mobile_fu. 
+mobile device emulator, or you can pass 'true' as first argument to has_mobile_fu. 
 
 example:
   class ApplicationController < ActionController::Base
-    has_mobile_fu :test_mode => true 
+    has_mobile_fu true 
   end
 
 
