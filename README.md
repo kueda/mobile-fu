@@ -101,6 +101,17 @@ Inspiration for Mobile Fu came from [Noel Rappin's rails_iui](http://blogs.pathf
 
 Hopefully this should help you create some awesome mobile applications.
 
+Ignoring specific request formats
+---------------------------------
+
+If you want to ignore specific request formats you can just pass `:ignore_formats => [<array of your formats>]`
+
+```ruby
+class ApplicationController < ActionController::Base
+  has_mobile_fu :ignore_formats => [:iphone, :json] 
+end
+```
+
 Testing Mobile Interface
 ------------------------
 

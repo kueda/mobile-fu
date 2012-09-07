@@ -54,7 +54,15 @@ module ActionController
       #      has_mobile_fu false
       #    end
       #
-      def has_mobile_fu(set_request_format = true)
+      def has_mobile_fu(*args)
+        if args[0].is_a?(Hash)
+          options = args[0]
+          set_request_format = true
+        else
+          set_request_format = args[0]
+          options = args.detect{|a| a.is_a?(Hash)} || {}
+        end
+        @@ignored_formats = options.has_key?(:ignore_formats) ? options[:ignore_formats] : []
         include ActionController::MobileFu::InstanceMethods
 
         before_filter :set_request_format if set_request_format
@@ -66,6 +74,9 @@ module ActionController
         helper_method :is_device?
         helper_method :mobile_device
       end
+
+      # mobile-fu will not attempt to set the request format to mobile if the requested format is among these formats
+      def ignored_formats; @@ignored_formats; end
 
       # Add this to your controllers to prevent the mobile format from being set for specific actions
       #   class AwesomeController < ApplicationController
@@ -85,6 +96,10 @@ module ActionController
     end
 
     module InstanceMethods
+      def should_ignore_format
+        return self.class.ignored_formats.include?(request.format.to_sym)
+      end
+
       def set_request_format(force_mobile = false)
         force_mobile ? force_mobile_format : set_mobile_format
       end
@@ -92,6 +107,7 @@ module ActionController
 
       # Forces the request format to be :mobile
       def force_mobile_format
+        return if should_ignore_format
         unless request.xhr?
           request.format = :mobile
           session[:mobile_view] = true if session[:mobile_view].nil?
@@ -111,6 +127,7 @@ module ActionController
       # 'Tablet' view.
 
       def set_mobile_format
+        return if should_ignore_format
         if !mobile_exempt? && is_mobile_device? && !request.xhr?
           request.format = :mobile unless session[:mobile_view] == false
           session[:mobile_view] = true if session[:mobile_view].nil?
