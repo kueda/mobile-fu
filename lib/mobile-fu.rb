@@ -59,7 +59,7 @@ module ActionController
           options = args[0]
           set_request_format = true
         else
-          set_request_format = args[0]
+          set_request_format = args[0] != false
           options = args.detect{|a| a.is_a?(Hash)} || {}
         end
         @@ignored_formats = options.has_key?(:ignore_formats) ? options[:ignore_formats] : []
