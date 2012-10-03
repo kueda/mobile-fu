@@ -97,7 +97,8 @@ module ActionController
 
     module InstanceMethods
       def should_ignore_format
-        return self.class.ignored_formats.include?(request.format.to_sym)
+        return true if is_tablet_device? && self.class.ignored_formats.include?(:tablet)
+        self.class.ignored_formats.include?(request.format.to_sym)
       end
 
       def set_request_format(force_mobile = false)
